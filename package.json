@@ -5,9 +5,12 @@
   "description": "Cross-chain Testnet Hub for EVM and beyond.",
   "scripts": {
     "backend": "pnpm --filter backend",
-    "sdk": "pnpm --filter sdk"
+    "sdk": "pnpm --filter sdk",
+    "db:migrate": "dotenv -e .env.dev -- pnpm --filter backend exec prisma migrate dev",
+    "db:studio": "dotenv -e .env.dev -- pnpm --filter backend exec prisma studio"
   },
   "devDependencies": {
+    "dotenv-cli": "^7.4.2",
     "typescript": "^5.0.0"
   },
   "packageManager": "pnpm@10.15.1"
