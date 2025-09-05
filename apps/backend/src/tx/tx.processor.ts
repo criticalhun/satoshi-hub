@@ -32,31 +32,47 @@ export class TxProcessor extends WorkerHost {
     this.logger.log(`Job ${jobId} status updated to 'processing'.`);
 
     try {
-      // Get the provider for the source chain
-      const provider = this.blockchainService.getProvider(txJob.fromChainId);
+      // 1. Get the signer for the source chain
+      const signer = this.blockchainService.getSigner(txJob.fromChainId);
+      this.logger.log(`Using signer address: ${signer.address}`);
 
-      // --- Transaction Preparation ---
+      // 2. Define transaction details
       const toAddress = '0x000000000000000000000000000000000000dEaD'; // Burn address
-      const amount = ethers.parseEther('0.0001'); // Send 0.0001 ETH
+      const amount = ethers.parseEther('0.0001');
 
-      const preparedTx = {
+      const txRequest = {
         to: toAddress,
-        value: amount.toString(),
+        value: amount,
       };
 
-      this.logger.log(`Prepared transaction for job ${jobId}:`, preparedTx);
+      this.logger.log(
+        `Sending transaction from ${signer.address} on chainId ${txJob.fromChainId}`,
+        txRequest,
+      );
 
+      // 3. Sign and send the transaction
+      const sentTx = await signer.sendTransaction(txRequest);
+
+      this.logger.log(
+        `Transaction sent. Hash: ${sentTx.hash}. Waiting for confirmation...`,
+      );
+
+      // 4. Update the job with the transaction hash
       const finalJob = await this.prisma.txJob.update({
         where: { id: jobId },
         data: {
-          status: 'completed',
+          status: 'submitted', // New status: sent, but not yet confirmed
           result: {
-            message: 'Transaction prepared successfully.',
-            preparedTx,
+            message: 'Transaction submitted to the network.',
+            txHash: sentTx.hash,
+            from: sentTx.from,
+            to: sentTx.to,
+            value: sentTx.value.toString(),
           },
         },
       });
-      this.logger.log(`Job ${jobId} status updated to 'completed'.`);
+
+      this.logger.log(`Job ${jobId} status updated to 'submitted'.`);
       return finalJob;
     } catch (error) {
       this.logger.error(`Error processing job ${jobId}:`, error);
