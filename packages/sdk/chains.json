@@ -2,29 +2,29 @@
   {
     "id": 11155111,
     "name": "Sepolia",
-    "isTestnet": true,
     "isEvm": true,
+    "isTestnet": true,
     "rpcUrl": "https://rpc.sepolia.org"
   },
   {
     "id": 97,
     "name": "BNB Smart Chain Testnet",
-    "isTestnet": true,
     "isEvm": true,
-    "rpcUrl": "https://data-seed-prebsc-1-s1.binance.org:8545"
+    "isTestnet": true,
+    "rpcUrl": "https://data-seed-prebsc-1-s1.binance.org:8545/"
   },
   {
     "id": 80002,
     "name": "Polygon Amoy",
-    "isTestnet": true,
     "isEvm": true,
-    "rpcUrl": "https://rpc-amoy.polygon.technology"
+    "isTestnet": true,
+    "rpcUrl": "https://rpc-amoy.polygon.technology/"
   },
   {
     "id": 43113,
     "name": "Avalanche Fuji Testnet",
-    "isTestnet": true,
     "isEvm": true,
+    "isTestnet": true,
     "rpcUrl": "https://api.avax-test.network/ext/bc/C/rpc"
   }
 ]

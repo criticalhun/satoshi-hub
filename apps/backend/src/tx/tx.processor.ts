@@ -2,43 +2,72 @@ import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 import { PrismaService } from '../prisma/prisma.service';
 import { Logger } from '@nestjs/common';
-
-// A helper function to simulate async work
-const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+import { BlockchainService } from '../blockchain/blockchain.service';
+import { ethers } from 'ethers';
 
 @Processor('tx-queue')
 export class TxProcessor extends WorkerHost {
   private readonly logger = new Logger(TxProcessor.name);
 
-  constructor(private readonly prisma: PrismaService) {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly blockchainService: BlockchainService,
+  ) {
     super();
   }
 
   async process(job: Job<{ jobId: string }>): Promise<any> {
-    this.logger.log(`Processing job ${job.id} with data:`, job.data);
-
     const { jobId } = job.data;
+    this.logger.log(`Processing job ${jobId}`);
 
-    // 1. Update status to 'processing'
+    const txJob = await this.prisma.txJob.findUnique({ where: { id: jobId } });
+    if (!txJob) {
+      throw new Error(`TxJob with id ${jobId} not found.`);
+    }
+
     await this.prisma.txJob.update({
       where: { id: jobId },
       data: { status: 'processing' },
     });
     this.logger.log(`Job ${jobId} status updated to 'processing'.`);
 
-    // 2. Simulate blockchain work
-    await delay(5000); // Wait for 5 seconds
+    try {
+      // Get the provider for the source chain
+      const provider = this.blockchainService.getProvider(txJob.fromChainId);
 
-    // 3. Update status to 'completed'
-    const finalJob = await this.prisma.txJob.update({
-      where: { id: jobId },
-      data: {
-        status: 'completed',
-        result: { message: 'Transaction processed successfully' },
-      },
-    });
-    this.logger.log(`Job ${jobId} status updated to 'completed'.`);
+      // --- Transaction Preparation ---
+      const toAddress = '0x000000000000000000000000000000000000dEaD'; // Burn address
+      const amount = ethers.parseEther('0.0001'); // Send 0.0001 ETH
 
-    return finalJob;
+      const preparedTx = {
+        to: toAddress,
+        value: amount.toString(),
+      };
+
+      this.logger.log(`Prepared transaction for job ${jobId}:`, preparedTx);
+
+      const finalJob = await this.prisma.txJob.update({
+        where: { id: jobId },
+        data: {
+          status: 'completed',
+          result: {
+            message: 'Transaction prepared successfully.',
+            preparedTx,
+          },
+        },
+      });
+      this.logger.log(`Job ${jobId} status updated to 'completed'.`);
+      return finalJob;
+    } catch (error) {
+      this.logger.error(`Error processing job ${jobId}:`, error);
+      await this.prisma.txJob.update({
+        where: { id: jobId },
+        data: {
+          status: 'failed',
+          result: { message: error.message },
+        },
+      });
+      throw error;
+    }
   }
 }

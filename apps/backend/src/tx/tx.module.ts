@@ -4,6 +4,7 @@ import { TxService } from './tx.service';
 import { TxController } from './tx.controller';
 import { PrismaModule } from '../prisma/prisma.module';
 import { TxProcessor } from './tx.processor';
+import { BlockchainModule } from '../blockchain/blockchain.module';
 
 @Module({
   imports: [
@@ -11,9 +12,9 @@ import { TxProcessor } from './tx.processor';
       name: 'tx-queue',
     }),
     PrismaModule,
+    BlockchainModule,
   ],
   controllers: [TxController],
-  // Add the processor to the providers
   providers: [TxService, TxProcessor],
 })
 export class TxModule {}
