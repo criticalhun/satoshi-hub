@@ -7,7 +7,9 @@
     "backend": "pnpm --filter backend",
     "sdk": "pnpm --filter sdk",
     "db:migrate": "dotenv -e .env.dev -- pnpm --filter backend exec prisma migrate dev",
-    "db:studio": "dotenv -e .env.dev -- pnpm --filter backend exec prisma studio"
+    "db:studio": "dotenv -e .env.dev -- pnpm --filter backend exec prisma studio",
+    "db:seed": "dotenv -e .env.dev -- pnpm --filter backend run seed",
+    "build": "pnpm -r build"
   },
   "devDependencies": {
     "dotenv-cli": "^7.4.2",

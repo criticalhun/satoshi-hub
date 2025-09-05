@@ -3,7 +3,9 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../node_modules/.prisma/client"
+  // This output path is crucial for pnpm workspaces.
+  // It places the generated client in the root node_modules, where it can be found.
+  output   = "../../../node_modules/.prisma/client"
 }
 
 datasource db {
