@@ -1,0 +1,14 @@
+{
+  "name": "satoshi-hub-monorepo",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Cross-chain Testnet Hub for EVM and beyond.",
+  "scripts": {
+    "backend": "pnpm --filter backend",
+    "sdk": "pnpm --filter sdk"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "packageManager": "pnpm@10.15.1"
+}
