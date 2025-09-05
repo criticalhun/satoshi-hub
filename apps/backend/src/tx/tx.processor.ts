@@ -32,47 +32,47 @@ export class TxProcessor extends WorkerHost {
     this.logger.log(`Job ${jobId} status updated to 'processing'.`);
 
     try {
-      // 1. Get the signer for the source chain
       const signer = this.blockchainService.getSigner(txJob.fromChainId);
       this.logger.log(`Using signer address: ${signer.address}`);
 
-      // 2. Define transaction details
-      const toAddress = '0x000000000000000000000000000000000000dEaD'; // Burn address
+      const toAddress = '0x000000000000000000000000000000000000dEaD';
       const amount = ethers.parseEther('0.0001');
 
-      const txRequest = {
-        to: toAddress,
-        value: amount,
-      };
+      const txRequest = { to: toAddress, value: amount };
 
-      this.logger.log(
-        `Sending transaction from ${signer.address} on chainId ${txJob.fromChainId}`,
-        txRequest,
-      );
-
-      // 3. Sign and send the transaction
+      this.logger.log(`Sending transaction...`, txRequest);
       const sentTx = await signer.sendTransaction(txRequest);
-
       this.logger.log(
         `Transaction sent. Hash: ${sentTx.hash}. Waiting for confirmation...`,
       );
 
-      // 4. Update the job with the transaction hash
+      const receipt = await sentTx.wait();
+
+      // --- JAVÍTÁS: Ellenőrizzük, hogy a 'receipt' nem null ---
+      if (!receipt) {
+        throw new Error(
+          `Transaction failed to confirm and get a receipt. Hash: ${sentTx.hash}`,
+        );
+      }
+
+      this.logger.log(
+        `Transaction confirmed in block number: ${receipt.blockNumber}`,
+      );
+
       const finalJob = await this.prisma.txJob.update({
         where: { id: jobId },
         data: {
-          status: 'submitted', // New status: sent, but not yet confirmed
+          status: 'completed',
           result: {
-            message: 'Transaction submitted to the network.',
-            txHash: sentTx.hash,
-            from: sentTx.from,
-            to: sentTx.to,
-            value: sentTx.value.toString(),
+            message: 'Transaction confirmed on source chain.',
+            txHash: receipt.hash,
+            blockNumber: receipt.blockNumber,
+            gasUsed: receipt.gasUsed.toString(),
           },
         },
       });
 
-      this.logger.log(`Job ${jobId} status updated to 'submitted'.`);
+      this.logger.log(`Job ${jobId} status updated to 'completed'.`);
       return finalJob;
     } catch (error) {
       this.logger.error(`Error processing job ${jobId}:`, error);
