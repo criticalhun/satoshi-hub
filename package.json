@@ -10,8 +10,7 @@
     "db:studio": "dotenv -e .env.dev -- pnpm --filter backend exec prisma studio",
     "db:seed": "dotenv -e .env.dev -- pnpm --filter backend run seed",
     "build": "pnpm -r build",
-    "dev:backend": "dotenv -e .env.dev -- pnpm --filter backend start:dev",
-    "test": "jest"
+    "dev:backend": "dotenv -e .env.dev -- pnpm --filter backend start:dev"
   },
   "devDependencies": {
     "dotenv-cli": "^7.4.2",
