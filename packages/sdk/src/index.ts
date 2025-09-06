@@ -1,15 +1,10 @@
-import chains from '../chains.json';
+import chains from './chains';
 
-export interface Chain {
-  id: number;
-  name: string;
-  isTestnet: boolean;
-  isEvm: boolean;
-  rpcUrl: string;
+export const ALL_CHAINS = chains;
+
+export function getChainById(id: number) {
+  return chains.find((c) => c.id === id);
 }
 
-export const ALL_CHAINS: Chain[] = chains;
-
-export function getChainById(id: number): Chain | undefined {
-  return ALL_CHAINS.find(chain => chain.id === id);
-}
+// Exportáljuk az összes típust a types.ts fájlból
+export * from './types';

@@ -1,12 +1,7 @@
-import { IsInt, IsObject } from 'class-validator';
+import { TxPayload } from './tx-payload.interface'; // vagy ahonnan jön
 
 export class CreateTxDto {
-  @IsInt()
-  fromChainId: number;
-
-  @IsInt()
-  toChainId: number;
-
-  @IsObject()
-  payload: Record<string, any>;
+  fromChainId!: number;
+  toChainId!: number;
+  payload!: TxPayload;
 }

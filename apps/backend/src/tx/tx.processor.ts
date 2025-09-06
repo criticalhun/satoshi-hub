@@ -3,7 +3,8 @@ import { Job } from 'bullmq';
 import { PrismaService } from '../prisma/prisma.service';
 import { Logger } from '@nestjs/common';
 import { BlockchainService } from '../blockchain/blockchain.service';
-import { ethers } from 'ethers';
+import { PayloadService } from '../payload/payload.service';
+import { TxPayload } from '@satoshi-hub/sdk';
 
 @Processor('tx-queue')
 export class TxProcessor extends WorkerHost {
@@ -12,6 +13,7 @@ export class TxProcessor extends WorkerHost {
   constructor(
     private readonly prisma: PrismaService,
     private readonly blockchainService: BlockchainService,
+    private readonly payloadService: PayloadService,
   ) {
     super();
   }
@@ -33,42 +35,37 @@ export class TxProcessor extends WorkerHost {
 
     try {
       const signer = this.blockchainService.getSigner(txJob.fromChainId);
+      if (!signer) {
+        throw new Error(`Signer not found for chainId: ${txJob.fromChainId}`);
+      }
       this.logger.log(`Using signer address: ${signer.address}`);
 
-      const toAddress = '0x000000000000000000000000000000000000dEaD';
-      const amount = ethers.parseEther('0.0001');
+      const payload: TxPayload = JSON.parse(txJob.payload); // <-- Visszaalakítás objektummá
+      const txData = await this.payloadService.process(payload);
+      
+      const txRequest = { to: txData.to, value: txData.value, data: txData.data };
 
-      const txRequest = { to: toAddress, value: amount };
-
-      this.logger.log(`Sending transaction...`, txRequest);
       const sentTx = await signer.sendTransaction(txRequest);
-      this.logger.log(
-        `Transaction sent. Hash: ${sentTx.hash}. Waiting for confirmation...`,
-      );
+      if (!sentTx) {
+        throw new Error('Failed to send transaction.');
+      }
+      this.logger.log(`Transaction sent. Hash: ${sentTx.hash}. Waiting for confirmation...`);
 
       const receipt = await sentTx.wait();
-
-      // --- JAVÍTÁS: Ellenőrizzük, hogy a 'receipt' nem null ---
       if (!receipt) {
-        throw new Error(
-          `Transaction failed to confirm and get a receipt. Hash: ${sentTx.hash}`,
-        );
+        throw new Error(`Transaction failed to confirm. Hash: ${sentTx.hash}`);
       }
-
-      this.logger.log(
-        `Transaction confirmed in block number: ${receipt.blockNumber}`,
-      );
+      this.logger.log(`Transaction confirmed in block: ${receipt.blockNumber}`);
 
       const finalJob = await this.prisma.txJob.update({
         where: { id: jobId },
         data: {
           status: 'completed',
-          result: {
+          result: JSON.stringify({
             message: 'Transaction confirmed on source chain.',
             txHash: receipt.hash,
             blockNumber: receipt.blockNumber,
-            gasUsed: receipt.gasUsed.toString(),
-          },
+          }),
         },
       });
 
@@ -80,7 +77,7 @@ export class TxProcessor extends WorkerHost {
         where: { id: jobId },
         data: {
           status: 'failed',
-          result: { message: error.message },
+          result: JSON.stringify({ message: error instanceof Error ? error.message : String(error) }),
         },
       });
       throw error;

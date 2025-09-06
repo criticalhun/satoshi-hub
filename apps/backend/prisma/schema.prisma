@@ -1,71 +1,19 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
-  // This output path is crucial for pnpm workspaces.
-  // It places the generated client in the root node_modules, where it can be found.
-  output   = "../../../node_modules/.prisma/client"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
-}
-
-model User {
-  id         String      @id @default(cuid())
-  email      String      @unique
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  workspaces Workspace[]
-  apiKeys    ApiKey[]
-}
-
-model Workspace {
-  id        String   @id @default(cuid())
-  name      String
-  ownerId   String
-  owner     User     @relation(fields: [ownerId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([ownerId, name])
-}
-
-model Chain {
-  id        Int      @id
-  name      String
-  chainId   Int      @unique
-  isEvm     Boolean  @default(true)
-  rpcStatus String   @default("pending")
-  lastCheck DateTime @default(now())
 }
 
 model TxJob {
   id          String   @id @default(cuid())
-  status      String   @default("pending") // pending, processing, completed, failed
   fromChainId Int
   toChainId   Int
-  payload     Json
-  result      Json?
+  payload     String   // Json helyett String
+  status      String   @default("pending")
+  result      String?  // Json? helyett String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-}
-
-model Webhook {
-  id          String   @id @default(cuid())
-  url         String
-  event       String // e.g., "txjob.completed"
-  workspaceId String
-  createdAt   DateTime @default(now())
-}
-
-model ApiKey {
-  id       String   @id @default(cuid())
-  key      String   @unique
-  userId   String
-  user     User     @relation(fields: [userId], references: [id])
-  requests Int      @default(0)
-  createdAt DateTime @default(now())
 }

@@ -1,38 +1,39 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { getChainById } from '@satoshi-hub/sdk';
 import { ethers } from 'ethers';
+import { ConfigService } from '@nestjs/config';
+import { SUPPORTED_CHAINS, ChainConfig } from './chains.config';
 
 @Injectable()
 export class BlockchainService {
   private readonly logger = new Logger(BlockchainService.name);
-  private readonly privateKey: string;
 
-  constructor(private readonly configService: ConfigService) {
-    const pk = this.configService.get<string>('SIGNER_PRIVATE_KEY');
-    if (!pk) {
-      throw new Error(
-        'SIGNER_PRIVATE_KEY is not set in the environment variables.',
-      );
-    }
-    this.privateKey = pk;
-  }
+  constructor(private readonly configService: ConfigService) {}
 
-  getProvider(chainId: number): ethers.JsonRpcProvider {
-    const chain = getChainById(chainId);
-    if (!chain || !chain.rpcUrl) {
-      this.logger.error(`No RPC URL configured for chainId: ${chainId}`);
+  private getChainConfig(chainId: number): ChainConfig {
+    const chain = SUPPORTED_CHAINS.find((chain) => chain.chainId === chainId);
+    if (!chain) {
       throw new Error(`Unsupported chainId: ${chainId}`);
     }
-    return new ethers.JsonRpcProvider(chain.rpcUrl);
+    return chain;
   }
 
-  getSigner(chainId: number): ethers.Wallet {
-    const provider = this.getProvider(chainId);
-    const signer = new ethers.Wallet(this.privateKey, provider);
-    this.logger.log(
-      `Created signer for address ${signer.address} on chainId ${chainId}`,
-    );
+  getSigner(chainId: number): ethers.Wallet | null {
+    const chainConfig = this.getChainConfig(chainId);
+    if (chainConfig.chainId === -1) {
+      this.logger.error(`Non-EVM chain detected: ${chainConfig.name}. Signer not applicable.`);
+      return null;
+    }
+
+    const rpcUrl = chainConfig.rpcUrl;
+    this.logger.log(`Connecting to RPC URL: ${rpcUrl} for chainId: ${chainId}`);
+    const provider = new ethers.JsonRpcProvider(rpcUrl);
+    const privateKey = this.configService.get<string>('SIGNER_PRIVATE_KEY');
+    if (!privateKey) {
+      throw new Error('SIGNER_PRIVATE_KEY is not set in the environment variables');
+    }
+    const signer = new ethers.Wallet(privateKey, provider);
+
+    this.logger.log(`Created signer for address ${signer.address} on chainId ${chainId}`);
     return signer;
   }
 }

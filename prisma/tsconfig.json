@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@satoshi-hub/sdk": ["../packages/sdk/dist"],
+      "@satoshi-hub/sdk/*": ["../packages/sdk/dist/*"]
+    },
+    "esModuleInterop": true,
+    "resolveJsonModule": true
+  }
+}
