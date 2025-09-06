@@ -1,10 +1,18 @@
-import chains from './chains';
+// Add exports for PayloadType, TxPayload, and NativeTokenTransferPayload
 
-export const ALL_CHAINS = chains;
-
-export function getChainById(id: number) {
-  return chains.find((c) => c.id === id);
+export enum PayloadType {
+  NATIVE_TOKEN_TRANSFER = 'NATIVE_TOKEN_TRANSFER',
+  // más típusok...
 }
 
-// Exportáljuk az összes típust a types.ts fájlból
-export * from './types';
+export interface TxPayload {
+  type: PayloadType;
+  // közös mezők...
+}
+
+export interface NativeTokenTransferPayload extends TxPayload {
+  type: PayloadType.NATIVE_TOKEN_TRANSFER;
+  amount: string;
+  to: string;
+  // egyéb specifikus mezők...
+}

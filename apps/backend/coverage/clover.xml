@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1757157306983" clover="3.2.0">
-  <project timestamp="1757157306983" name="All files">
-    <metrics statements="154" coveredstatements="66" conditionals="13" coveredconditionals="2" methods="21" coveredmethods="10" elements="188" coveredelements="78" complexity="0" loc="154" ncloc="154" packages="7" files="17" classes="17"/>
+<coverage generated="1757166523051" clover="3.2.0">
+  <project timestamp="1757166523052" name="All files">
+    <metrics statements="103" coveredstatements="41" conditionals="6" coveredconditionals="2" methods="17" coveredmethods="7" elements="126" coveredelements="50" complexity="0" loc="103" ncloc="103" packages="6" files="15" classes="15"/>
     <package name="src">
       <metrics statements="18" coveredstatements="8" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="2"/>
       <file name="app.controller.ts" path="/workspaces/satoshi-hub/apps/backend/src/app.controller.ts">
@@ -36,7 +36,7 @@
       </file>
     </package>
     <package name="src.blockchain">
-      <metrics statements="28" coveredstatements="23" conditionals="3" coveredconditionals="2" methods="4" coveredmethods="4"/>
+      <metrics statements="28" coveredstatements="22" conditionals="3" coveredconditionals="2" methods="4" coveredmethods="4"/>
       <file name="blockchain.module.ts" path="/workspaces/satoshi-hub/apps/backend/src/blockchain/blockchain.module.ts">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
@@ -45,11 +45,11 @@
       </file>
       <file name="blockchain.service.ts" path="/workspaces/satoshi-hub/apps/backend/src/blockchain/blockchain.service.ts">
         <metrics statements="24" coveredstatements="22" conditionals="3" coveredconditionals="2" methods="4" coveredmethods="4"/>
-        <line num="1" count="2" type="stmt"/>
-        <line num="2" count="2" type="stmt"/>
-        <line num="3" count="2" type="stmt"/>
-        <line num="4" count="2" type="stmt"/>
-        <line num="7" count="2" type="stmt"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
         <line num="8" count="5" type="stmt"/>
         <line num="10" count="5" type="stmt"/>
         <line num="13" count="3" type="stmt"/>
@@ -62,21 +62,21 @@
         <line num="24" count="0" type="stmt"/>
         <line num="27" count="2" type="stmt"/>
         <line num="28" count="2" type="stmt"/>
-        <line num="29" count="2" type="stmt"/>
-        <line num="30" count="2" type="stmt"/>
-        <line num="31" count="2" type="cond" truecount="1" falsecount="0"/>
-        <line num="32" count="1" type="stmt"/>
-        <line num="34" count="1" type="stmt"/>
-        <line num="36" count="1" type="stmt"/>
+        <line num="31" count="2" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="34" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="35" count="1" type="stmt"/>
         <line num="37" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
       </file>
       <file name="chains.config.ts" path="/workspaces/satoshi-hub/apps/backend/src/blockchain/chains.config.ts">
-        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="8" count="1" type="stmt"/>
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="8" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.payload">
-      <metrics statements="18" coveredstatements="8" conditionals="1" coveredconditionals="0" methods="2" coveredmethods="1"/>
+      <metrics statements="18" coveredstatements="0" conditionals="1" coveredconditionals="0" methods="2" coveredmethods="0"/>
       <file name="payload.module.ts" path="/workspaces/satoshi-hub/apps/backend/src/payload/payload.module.ts">
         <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
@@ -85,38 +85,21 @@
         <line num="9" count="0" type="stmt"/>
       </file>
       <file name="payload.service.ts" path="/workspaces/satoshi-hub/apps/backend/src/payload/payload.service.ts">
-        <metrics statements="14" coveredstatements="8" conditionals="1" coveredconditionals="0" methods="2" coveredmethods="1"/>
-        <line num="1" count="2" type="stmt"/>
-        <line num="2" count="2" type="stmt"/>
-        <line num="3" count="2" type="stmt"/>
-        <line num="10" count="2" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
-        <line num="15" count="1" type="stmt"/>
-        <line num="17" count="1" type="stmt"/>
+        <metrics statements="14" coveredstatements="0" conditionals="1" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="1" count="0" type="stmt"/>
+        <line num="2" count="0" type="stmt"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="26" count="0" type="cond" truecount="0" falsecount="1"/>
         <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
-      </file>
-    </package>
-    <package name="src.payload.processors">
-      <metrics statements="11" coveredstatements="5" conditionals="1" coveredconditionals="0" methods="2" coveredmethods="1"/>
-      <file name="native-token-transfer.processor.ts" path="/workspaces/satoshi-hub/apps/backend/src/payload/processors/native-token-transfer.processor.ts">
-        <metrics statements="11" coveredstatements="5" conditionals="1" coveredconditionals="0" methods="2" coveredmethods="1"/>
-        <line num="1" count="3" type="stmt"/>
-        <line num="3" count="3" type="stmt"/>
-        <line num="4" count="3" type="stmt"/>
-        <line num="7" count="3" type="stmt"/>
-        <line num="8" count="2" type="stmt"/>
-        <line num="11" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.prisma">
@@ -129,14 +112,14 @@
       </file>
       <file name="prisma.service.ts" path="/workspaces/satoshi-hub/apps/backend/src/prisma/prisma.service.ts">
         <metrics statements="4" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="1" count="3" type="stmt"/>
-        <line num="2" count="3" type="stmt"/>
-        <line num="5" count="3" type="stmt"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.tx">
-      <metrics statements="71" coveredstatements="19" conditionals="6" coveredconditionals="0" methods="8" coveredmethods="2"/>
+      <metrics statements="31" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="1"/>
       <file name="tx.controller.ts" path="/workspaces/satoshi-hub/apps/backend/src/tx/tx.controller.ts">
         <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
@@ -158,49 +141,6 @@
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
-      </file>
-      <file name="tx.processor.ts" path="/workspaces/satoshi-hub/apps/backend/src/tx/tx.processor.ts">
-        <metrics statements="40" coveredstatements="11" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="1"/>
-        <line num="1" count="1" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="4" count="1" type="stmt"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="6" count="1" type="stmt"/>
-        <line num="10" count="1" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
-        <line num="14" count="1" type="stmt"/>
-        <line num="15" count="1" type="stmt"/>
-        <line num="16" count="1" type="stmt"/>
-        <line num="18" count="1" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="26" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="38" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="49" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="55" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="76" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
       </file>
       <file name="tx.service.ts" path="/workspaces/satoshi-hub/apps/backend/src/tx/tx.service.ts">
         <metrics statements="15" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="1"/>

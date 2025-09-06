@@ -26,7 +26,10 @@ export class BlockchainService {
 
     const rpcUrl = chainConfig.rpcUrl;
     this.logger.log(`Connecting to RPC URL: ${rpcUrl} for chainId: ${chainId}`);
-    const provider = new ethers.JsonRpcProvider(rpcUrl);
+    
+    // Javított provider az ethers v5 szintaxissal
+    const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
+    
     const privateKey = this.configService.get<string>('SIGNER_PRIVATE_KEY');
     if (!privateKey) {
       throw new Error('SIGNER_PRIVATE_KEY is not set in the environment variables');
@@ -36,4 +39,3 @@ export class BlockchainService {
     this.logger.log(`Created signer for address ${signer.address} on chainId ${chainId}`);
     return signer;
   }
-}

@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.5% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/16</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/2</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">57.14% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/14</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -97,23 +97,23 @@
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -131,23 +131,23 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Injectable, Logger } from '@nestjs/common';
-import { PayloadType, TxPayload } from '@satoshi-hub/sdk';
-import { NativeTokenTransferProcessor } from './processors/native-token-transfer.processor';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { Injectable, Logger } from '@nestjs/common';</span>
+<span class="cstat-no" title="statement not covered" >import { PayloadType, TxPayload } from '@satoshi-hub/sdk';</span>
+<span class="cstat-no" title="statement not covered" >import { NativeTokenTransferProcessor } from './processors/native-token-transfer.processor';</span>
 import {
   IPayloadProcessor,
   ProcessedTxData,
 } from './payload.interface';
 &nbsp;
 @Injectable()
-export class PayloadService {
-  private readonly logger = new Logger(PayloadService.name);
-  private processors: Map&lt;PayloadType, IPayloadProcessor&gt; = new Map();
+export class <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >PayloadService<span class="cstat-no" title="statement not covered" > </span>{</span></span>
+  private readonly <span class="cstat-no" title="statement not covered" >logger = new Logger(PayloadService.name);</span>
+  private <span class="cstat-no" title="statement not covered" >processors: Map&lt;PayloadType, IPayloadProcessor&gt; = new Map();</span>
 &nbsp;
-  constructor(
-    private readonly nativeTokenTransferProcessor: NativeTokenTransferProcessor,
+<span class="fstat-no" title="function not covered" >  constructor(</span>
+    private readonly <span class="cstat-no" title="statement not covered" >nativeTokenTransferProcessor: N</span>ativeTokenTransferProcessor,
   ) {
-    this.processors.set(
+<span class="cstat-no" title="statement not covered" >    this.processors.set(</span>
       PayloadType.NATIVE_TOKEN_TRANSFER,
       this.nativeTokenTransferProcessor,
     );
@@ -172,7 +172,7 @@ export class PayloadService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-06T11:15:06.954Z
+                at 2025-09-06T13:48:43.027Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
