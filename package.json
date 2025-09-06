@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.0.1",
   "description": "Cross-chain Testnet Hub for EVM and beyond.",
-
   "scripts": {
     "backend": "pnpm --filter backend",
     "sdk": "pnpm --filter sdk",
@@ -11,11 +10,9 @@
     "db:studio": "dotenv -e .env.dev -- pnpm --filter backend exec prisma studio",
     "db:seed": "dotenv -e .env.dev -- pnpm --filter backend run seed",
     "build": "pnpm -r build",
-    "dev:backend": "dotenv -e .env.dev -- pnpm --filter backend start:dev"
+    "dev:backend": "dotenv -e .env.dev -- pnpm --filter backend start:dev",
+    "test": "jest"
   },
-  "scripts": {
-  "test": "jest"
-}
   "devDependencies": {
     "dotenv-cli": "^7.4.2",
     "typescript": "^5.0.0"
