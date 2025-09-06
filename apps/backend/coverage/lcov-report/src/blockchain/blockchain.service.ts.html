@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.59% </span>
+                <span class="strong">88.88% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>25/27</span>
+                <span class='fraction'>24/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">91.66% </span>
+                <span class="strong">87.5% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>22/24</span>
+                <span class='fraction'>21/24</span>
             </div>
         
             
@@ -104,48 +104,51 @@
 <a name='L39'></a><a href='#L39'>39</a>
 <a name='L40'></a><a href='#L40'>40</a>
 <a name='L41'></a><a href='#L41'>41</a>
-<a name='L42'></a><a href='#L42'>42</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">38x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Injectable, Logger } from '@nestjs/common';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// apps/backend/src/blockchain/blockchain.service.ts
+import { Injectable, Logger } from '@nestjs/common';
 import { ethers } from 'ethers';
 import { ConfigService } from '@nestjs/config';
 import { SUPPORTED_CHAINS, ChainConfig } from './chains.config';
@@ -166,25 +169,25 @@ export class BlockchainService {
 &nbsp;
   getSigner(chainId: number): ethers.Wallet | null {
     const chainConfig = this.getChainConfig(chainId);
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (chainConfig.chainId === -1) {
-<span class="cstat-no" title="statement not covered" >      this.logger.error(`Non-EVM chain detected: ${chainConfig.name}. Signer not applicable.`);</span>
-<span class="cstat-no" title="statement not covered" >      return null;</span>
+    if (chainConfig.chainId === -1) {
+      this.logger.error(`Non-EVM chain detected: ${chainConfig.name}. Signer not applicable.`);
+      return null;
     }
 &nbsp;
     const rpcUrl = chainConfig.rpcUrl;
     this.logger.log(`Connecting to RPC URL: ${rpcUrl} for chainId: ${chainId}`);
     
-    // Javított provider az ethers v5 szintaxissal
+    // JAVÍTÁS: ethers v5 szintaxis
     const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
     
     const privateKey = this.configService.get&lt;string&gt;('SIGNER_PRIVATE_KEY');
     if (!privateKey) {
       throw new Error('SIGNER_PRIVATE_KEY is not set in the environment variables');
     }
-    const signer = new ethers.Wallet(privateKey, provider);
+    const signer = <span class="cstat-no" title="statement not covered" >new ethers.Wallet(privateKey, provider);</span>
 &nbsp;
-    this.logger.log(`Created signer for address ${signer.address} on chainId ${chainId}`);
-    return signer;
+<span class="cstat-no" title="statement not covered" >    this.logger.log(`Created signer for address ${signer.address} on chainId ${chainId}`);</span>
+<span class="cstat-no" title="statement not covered" >    return signer;</span>
   }
 }</pre></td></tr></table></pre>
 
@@ -193,7 +196,7 @@ export class BlockchainService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-06T13:48:43.027Z
+                at 2025-09-06T18:02:27.994Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
