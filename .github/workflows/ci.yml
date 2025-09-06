@@ -27,5 +27,5 @@ jobs:
     - name: Install dependencies
       run: pnpm install
 
-    - name: Run tests
-      run: pnpm exec jest --coverage --detectOpenHandles
+    - name: Run backend tests
+      run: pnpm --filter backend exec jest --coverage --detectOpenHandles
