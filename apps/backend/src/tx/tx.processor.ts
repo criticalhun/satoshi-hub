@@ -63,7 +63,7 @@ export class TxProcessor extends WorkerHost {
           status: 'completed',
           result: JSON.stringify({
             message: 'Transaction confirmed on source chain.',
-            txHash: receipt.hash,
+            txHash: receipt.transactionHash,
             blockNumber: receipt.blockNumber,
           }),
         },

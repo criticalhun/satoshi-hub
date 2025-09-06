@@ -1,3 +1,4 @@
+// apps/backend/src/blockchain/blockchain.service.ts
 import { Injectable, Logger } from '@nestjs/common';
 import { ethers } from 'ethers';
 import { ConfigService } from '@nestjs/config';
@@ -27,7 +28,7 @@ export class BlockchainService {
     const rpcUrl = chainConfig.rpcUrl;
     this.logger.log(`Connecting to RPC URL: ${rpcUrl} for chainId: ${chainId}`);
     
-    // Javított provider az ethers v5 szintaxissal
+    // JAVÍTÁS: ethers v5 szintaxis
     const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
     
     const privateKey = this.configService.get<string>('SIGNER_PRIVATE_KEY');
@@ -39,3 +40,4 @@ export class BlockchainService {
     this.logger.log(`Created signer for address ${signer.address} on chainId ${chainId}`);
     return signer;
   }
+}

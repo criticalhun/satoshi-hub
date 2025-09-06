@@ -1,3 +1,4 @@
+// apps/backend/src/payload/processors/native-token-transfer.processor.ts
 import { Injectable, Logger } from '@nestjs/common';
 import { IPayloadProcessor, ProcessedTxData } from '../payload.interface';
 import { NativeTokenTransferPayload, PayloadType, TxPayload } from '@satoshi-hub/sdk';
@@ -9,13 +10,14 @@ export class NativeTokenTransferProcessor implements IPayloadProcessor {
 
   async process(payload: TxPayload): Promise<ProcessedTxData> {
     if (payload.type !== PayloadType.NATIVE_TOKEN_TRANSFER) {
-      throw new Error('Invalid payload type for NativeTokenTransferProcessor');
+      throw new Error(`Invalid payload type: ${payload.type}`);
     }
 
     const p = payload as NativeTokenTransferPayload;
-    this.logger.log(`Processing native token transfer to ${p.to} for amount ${p.amount}`);
+    this.logger.log(`Processing native token transfer to ${p.to} amount ${p.amount}`);
 
-    const amountInWei = ethers.parseUnits(p.amount, 'ether');
+    // JAVÍTÁS: ethers v5 szintaxis
+    const amountInWei = ethers.utils.parseUnits(p.amount, 'ether');
 
     return {
       to: p.to,
