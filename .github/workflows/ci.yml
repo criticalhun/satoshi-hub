@@ -27,12 +27,13 @@ jobs:
     - name: Install dependencies
       run: pnpm install
 
-    - name: Run backend tests
-      run: pnpm --filter backend exec jest --coverage --detectOpenHandles
-- name: Generate Prisma client
-  run: |
-    cd apps/backend
-    pnpm exec prisma generate
+    - name: Build SDK
+      run: pnpm --filter "@satoshi-hub/sdk" build
 
-- name: Run tests
-  run: pnpm --filter backend exec jest --coverage --detectOpenHandles
+    - name: Generate Prisma client
+      run: |
+        cd apps/backend
+        pnpm exec prisma generate
+
+    - name: Run backend tests
+      run: pnpm --filter backend exec jest --coverage
