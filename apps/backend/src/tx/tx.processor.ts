@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Logger } from '@nestjs/common';
 import { BlockchainService } from '../blockchain/blockchain.service';
 import { PayloadService } from '../payload/payload.service';
-import { TxPayload } from '@satoshi-hub/sdk';
+import { TransactionPayload } from '@satoshi-hub/sdk';
 
 @Processor('tx-queue')
 export class TxProcessor extends WorkerHost {
@@ -40,7 +40,7 @@ export class TxProcessor extends WorkerHost {
       }
       this.logger.log(`Using signer address: ${signer.address}`);
 
-      const payload: TxPayload = JSON.parse(txJob.payload); // <-- Visszaalakítás objektummá
+      const payload: TransactionPayload = JSON.parse(txJob.payload); // <-- Visszaalakítás objektummá
       const txData = await this.payloadService.process(payload);
       
       const txRequest = { to: txData.to, value: txData.value, data: txData.data };

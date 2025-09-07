@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PayloadType, TxPayload } from '@satoshi-hub/sdk';
+import { PayloadType, TransactionPayload } from '@satoshi-hub/sdk';
 import { NativeTokenTransferProcessor } from './processors/native-token-transfer.processor';
 import {
   IPayloadProcessor,
@@ -20,7 +20,7 @@ export class PayloadService {
     );
   }
 
-  process(payload: TxPayload): Promise<ProcessedTxData> {
+  process(payload: TransactionPayload): Promise<ProcessedTxData> {
     const processor = this.processors.get(payload.type);
 
     if (!processor) {
