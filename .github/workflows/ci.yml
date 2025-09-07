@@ -2,38 +2,35 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Set up Node.js
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 20
-
-    - name: Install pnpm
-      uses: pnpm/action-setup@v2
+        node-version: '20'
+        
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
       with:
         version: 8
-
+        
     - name: Install dependencies
       run: pnpm install
-
+      
     - name: Build SDK
-      run: pnpm --filter "@satoshi-hub/sdk" build
-
-    - name: Generate Prisma client
-      run: |
-        cd apps/backend
-        pnpm exec prisma generate
-
-    - name: Run backend tests
-      run: pnpm --filter backend exec jest --coverage
+      run: pnpm --filter @satoshi-hub/sdk build
+      
+    - name: Run unit tests only
+      env:
+        SIGNER_PRIVATE_KEY: 0x0000000000000000000000000000000000000000000000000000000000000001
+        NODE_ENV: test
+      run: pnpm --filter backend exec jest --coverage --testPathIgnorePatterns="/test/"

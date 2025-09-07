@@ -34,7 +34,7 @@ describe('BlockchainService', () => {
   });
 
   it('should return null for non-EVM chain', () => {
-    // Assuming chainId -1 is a non-EVM chain in SUPPORTED_CHAINS
+    // Solana Devnet chainId -1
     const result = service.getSigner(-1);
     expect(result).toBeNull();
   });
@@ -42,7 +42,18 @@ describe('BlockchainService', () => {
   it('should throw error when SIGNER_PRIVATE_KEY is not set', () => {
     mockConfigService.get.mockReturnValue(undefined);
     
-    // Use a supported EVM chainId (assuming 1 is supported)
-    expect(() => service.getSigner(1)).toThrow('SIGNER_PRIVATE_KEY is not set in the environment variables');
+    // Use a supported EVM chainId - Sepolia Testnet
+    expect(() => service.getSigner(11155111)).toThrow('SIGNER_PRIVATE_KEY is not set in the environment variables');
+  });
+
+  it('should create signer for valid EVM chain with private key', () => {
+    mockConfigService.get.mockReturnValue('0x0000000000000000000000000000000000000000000000000000000000000001');
+    
+    const result = service.getSigner(11155111);
+    expect(result).toBeTruthy();
+    // Remove the null check issue
+    if (result) {
+      expect(result.address).toBeDefined();
+    }
   });
 });

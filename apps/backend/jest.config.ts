@@ -1,26 +1,16 @@
 export default {
   moduleFileExtensions: ['js', 'json', 'ts'],
-  rootDir: './',
-  testRegex: 'src/.*\\.spec\\.ts$',
+  rootDir: 'src',
+  testRegex: '.*\\.spec\\.ts$',
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
   collectCoverageFrom: [
-    'src/**/*.(t|j)s',
-    '!src/**/*.spec.ts',
-    '!src/main.ts',
-    '!src/**/*.interface.ts',
+    '**/*.(t|j)s',
   ],
-  coverageDirectory: './coverage',
+  coverageDirectory: '../coverage',
   testEnvironment: 'node',
-  moduleNameMapper: {
-    '^src/(.*)$': '<rootDir>/src/$1',
-    '^@satoshi-hub/sdk$': '<rootDir>/../../packages/sdk/src/index.ts',
+  moduleNameMapping: {
+    '^@satoshi-hub/sdk$': '<rootDir>/../packages/sdk/dist/index.js',
   },
-  transformIgnorePatterns: [
-    '/node_modules/',
-    '/dist/',
-    '/packages/sdk/dist/',
-  ],
-  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],
 };

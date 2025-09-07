@@ -1,12 +1,11 @@
-import { ethers } from 'ethers';
-import { TxPayload } from '@satoshi-hub/sdk';
+import { TransactionPayload } from '@satoshi-hub/sdk';
 
 export interface ProcessedTxData {
   to: string;
-  value: ethers.BigNumberish;
+  value: string;
   data: string;
 }
 
 export interface IPayloadProcessor {
-  process(payload: TxPayload): Promise<ProcessedTxData>;
+  process(payload: TransactionPayload): Promise<ProcessedTxData>;
 }
