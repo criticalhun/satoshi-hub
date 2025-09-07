@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/services/wallet_service.dart';
 import '../../core/theme/app_theme.dart';
 import '../../shared/widgets/chain_selector.dart';
 import '../../shared/widgets/balance_card.dart';
@@ -12,6 +13,8 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(sessionProvider);
+
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
       body: SafeArea(
@@ -55,28 +58,27 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  IconButton(
-                    onPressed: () => context.go('/settings'),
-                    icon: const Icon(Icons.settings),
-                    color: AppTheme.textSecondary,
+                  // ÚJ GOMB: Connect Wallet
+                  ElevatedButton(
+                    onPressed: () async {
+                      final walletService = ref.read(walletServiceProvider);
+                      await walletService.connect((uri) {
+                        // TODO: QR kód megjelenítése a felhasználónak
+                        print('WalletConnect URI: $uri');
+                      });
+                      ref.read(sessionProvider.notifier).state = walletService.session;
+                    },
+                    child: Text(session == null ? 'Connect Wallet' : 'Connected'),
                   ),
                 ],
               ),
               const SizedBox(height: 24),
-
-              // Chain Selector
               const ChainSelector(),
               const SizedBox(height: 24),
-
-              // Balance Card
               const BalanceCard(),
               const SizedBox(height: 24),
-
-              // Quick Actions
               const QuickActions(),
               const SizedBox(height: 24),
-
-              // Recent Transactions
               const RecentTransactions(),
             ],
           ),
