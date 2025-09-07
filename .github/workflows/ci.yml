@@ -14,7 +14,13 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
-    - uses: pnpm/action-setup@v4
-    - run: pnpm install
-    - run: pnpm --filter @satoshi-hub/sdk build
-    - run: echo "Build successful - tests temporarily disabled during monorepo setup"
+    - name: Install pnpm
+      run: npm install -g pnpm@8.15.0
+    - name: Install dependencies
+      run: pnpm install
+    - name: Build SDK
+      run: pnpm --filter @satoshi-hub/sdk build
+    - name: Compile TypeScript
+      run: pnpm --filter backend exec tsc --noEmit
+    - name: Success
+      run: echo "✅ Build successful - ready for Flutter development"
