@@ -1,18 +1,21 @@
-// Add exports for PayloadType, TxPayload, and NativeTokenTransferPayload
+// Types
+export * from './types';
 
-export enum PayloadType {
-  NATIVE_TOKEN_TRANSFER = 'NATIVE_TOKEN_TRANSFER',
-  // más típusok...
-}
+// Chain data
+export * from './chains';
 
-export interface TxPayload {
-  type: PayloadType;
-  // közös mezők...
-}
+// Utilities
+export const formatTransactionHash = (hash: string): string => {
+  return `${hash.slice(0, 6)}...${hash.slice(-4)}`;
+};
 
-export interface NativeTokenTransferPayload extends TxPayload {
-  type: PayloadType.NATIVE_TOKEN_TRANSFER;
-  amount: string;
-  to: string;
-  // egyéb specifikus mezők...
-}
+export const formatAddress = (address: string): string => {
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+};
+
+export const formatAmount = (amount: string, decimals: number = 18): string => {
+  const num = parseFloat(amount);
+  if (num === 0) return '0';
+  if (num < 0.001) return '<0.001';
+  return num.toFixed(4);
+};

@@ -1,14 +1,22 @@
 {
   "name": "@satoshi-hub/sdk",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "description": "Shared types and utilities for Satoshi Hub",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -b"
-  },
-  "dependencies": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
   },
   "devDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.1.3"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.js"
+    }
   }
 }
