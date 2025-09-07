@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PayloadService } from './payload.service';
 import { NativeTokenTransferProcessor } from './processors/native-token-transfer.processor';
-import { PayloadType } from '@satoshi-hub/sdk';
+import { PayloadType, NativeTokenTransferPayload } from '@satoshi-hub/sdk';
 
 describe('PayloadService', () => {
   let service: PayloadService;
@@ -31,11 +31,12 @@ describe('PayloadService', () => {
   });
 
   it('should process native token transfer payload', async () => {
-    const payload = {
+    const payload: NativeTokenTransferPayload = {
       type: PayloadType.NATIVE_TOKEN_TRANSFER,
       to: '0x123',
       amount: '1.0',
     };
+
     const expectedResult = {
       to: '0x123',
       value: '1000000000000000000',
@@ -56,9 +57,8 @@ describe('PayloadService', () => {
       to: '0x123',
     };
 
-    // JAVÍTÁS: error casting Error típusra
     try {
-      await service.process(payload);
+      await service.process(payload as any);
       fail('Expected error to be thrown');
     } catch (error) {
       expect((error as Error).message).toBe('Unsupported payload type: UNSUPPORTED_TYPE');
