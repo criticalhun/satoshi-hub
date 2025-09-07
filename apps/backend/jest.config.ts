@@ -22,10 +22,5 @@ export default {
     '/dist/',
     '/packages/sdk/dist/',
   ],
-  coveragePathIgnorePatterns: [
-    '/node_modules/',
-    '/dist/',
-    '.interface.ts$',
-    '.dto.ts$',
-  ],
+  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],
 };

@@ -1,7 +1,18 @@
-import { TxPayload } from './tx-payload.interface'; // vagy ahonnan jön
+import { IsInt, IsObject, IsNotEmpty, Min } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateTxDto {
+  @IsInt()
+  @Min(1)
+  @Type(() => Number)
   fromChainId!: number;
+
+  @IsInt()
+  @Min(1)
+  @Type(() => Number)
   toChainId!: number;
-  payload!: TxPayload;
+
+  @IsObject()
+  @IsNotEmpty()
+  payload!: any;
 }

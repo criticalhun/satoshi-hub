@@ -8,44 +8,20 @@ export interface ChainConfig {
 export const SUPPORTED_CHAINS: ChainConfig[] = [
   {
     chainId: 11155111,
-    name: "Base Sepolia",
-    rpcUrl: "https://base-sepolia.rpc-url.com",
+    name: "Sepolia Testnet",
+    rpcUrl: "https://rpc.sepolia.org",
     nativeCurrency: "ETH",
   },
   {
-    chainId: 421613,
-    name: "Arbitrum Sepolia",
-    rpcUrl: "https://arbitrum-sepolia.rpc-url.com",
-    nativeCurrency: "ETH",
-  },
-  {
-    chainId: 420,
-    name: "Optimism Sepolia",
-    rpcUrl: "https://optimism-sepolia.rpc-url.com",
-    nativeCurrency: "ETH",
-  },
-  {
-    chainId: 80001,
+    chainId: 80002,
     name: "Polygon Amoy",
-    rpcUrl: "https://polygon-amoy.rpc-url.com",
+    rpcUrl: "https://rpc-amoy.polygon.technology/",
     nativeCurrency: "MATIC",
   },
   {
-    chainId: 280,
-    name: "zkSync Testnet",
-    rpcUrl: "https://zksync-testnet.rpc-url.com",
-    nativeCurrency: "ETH",
-  },
-  {
-    chainId: 534353,
-    name: "Scroll Testnet",
-    rpcUrl: "https://scroll-testnet.rpc-url.com",
-    nativeCurrency: "ETH",
-  },
-  {
-    chainId: 59140,
-    name: "Linea Sepolia",
-    rpcUrl: "https://linea-sepolia.rpc-url.com",
+    chainId: 421614,
+    name: "Arbitrum Sepolia",
+    rpcUrl: "https://arb-sepolia.g.alchemy.com/v2/demo",
     nativeCurrency: "ETH",
   },
   {
@@ -61,25 +37,7 @@ export const SUPPORTED_CHAINS: ChainConfig[] = [
     nativeCurrency: "BNB",
   },
   {
-    chainId: 5001,
-    name: "Mantle Testnet",
-    rpcUrl: "https://mantle-testnet.rpc-url.com",
-    nativeCurrency: "BIT",
-  },
-  {
-    chainId: 167004,
-    name: "Taiko",
-    rpcUrl: "https://taiko-testnet.rpc-url.com",
-    nativeCurrency: "ETH",
-  },
-  {
-    chainId: 1,
-    name: "StarkNet Testnet",
-    rpcUrl: "https://starknet-testnet.rpc-url.com",
-    nativeCurrency: "ETH",
-  },
-  {
-    chainId: -1, // Speciális jelzés, nem EVM kompatibilis
+    chainId: -1, // Speciális: nem EVM kompatibilis
     name: "Solana Devnet",
     rpcUrl: "https://api.devnet.solana.com",
     nativeCurrency: "SOL",

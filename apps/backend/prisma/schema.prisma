@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -11,9 +11,9 @@ model TxJob {
   id          String   @id @default(cuid())
   fromChainId Int
   toChainId   Int
-  payload     String   // Json helyett String
-  status      String   @default("pending")
-  result      String?  // Json? helyett String?
+  payload     String   // JSON string
+  status      String   @default("pending") // pending, processing, completed, failed
+  result      String?  // JSON string
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
