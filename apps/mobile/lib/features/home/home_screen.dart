@@ -1,130 +1,120 @@
+import '../../core/services/wallet/wallet_state.dart';
+import '../../core/services/wallet/wallet_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/services/wallet_service.dart';
 import '../../core/theme/app_theme.dart';
-import '../../shared/widgets/chain_selector.dart';
-import '../../shared/widgets/balance_card.dart';
+import '../../core/services/api_service.dart';
+import '../../core/services/wallet/wallet_manager.dart';
+import '../../shared/models/transaction_job.dart';
+import '../../shared/widgets/wallet_status_card.dart';
 import '../../shared/widgets/quick_actions.dart';
-import '../../shared/widgets/recent_transactions.dart';
+import 'widgets/recent_transactions_section.dart';
 
-class HomeScreen extends ConsumerWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends ConsumerStatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(sessionProvider);
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  List<TransactionJob> _recentTransactions = [];
+  bool _isLoading = false;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRecentTransactions();
+  }
+
+  Future<void> _loadRecentTransactions() async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
+    try {
+      final apiService = ref.read(apiServiceProvider);
+      final result = await apiService.getTransactionJobs(
+        page: 1,
+        limit: 5,
+      );
+
+      setState(() {
+        _recentTransactions = result['data'] as List<TransactionJob>;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final walletState = ref.watch(walletStateProvider);
 
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header with logo and settings
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: AppTheme.primaryColor,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Icon(
-                          Icons.currency_bitcoin,
-                          color: Colors.white,
-                          size: 24,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Satoshi Hub',
-                            style: Theme.of(context).textTheme.headlineMedium,
-                          ),
-                          Text(
-                            'Cross-chain Testnet',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  // ÚJ GOMB: Connect Wallet
-                  ElevatedButton(
-                    onPressed: () async {
-                      final walletService = ref.read(walletServiceProvider);
-                      await walletService.connect((uri) {
-                        // TODO: QR kód megjelenítése a felhasználónak
-                        print('WalletConnect URI: $uri');
-                      });
-                      ref.read(sessionProvider.notifier).state = walletService.session;
-                    },
-                    child: Text(session == null ? 'Connect Wallet' : 'Connected'),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              const ChainSelector(),
-              const SizedBox(height: 24),
-              const BalanceCard(),
-              const SizedBox(height: 24),
-              const QuickActions(),
-              const SizedBox(height: 24),
-              const RecentTransactions(),
-            ],
+      appBar: AppBar(
+        title: const Text('Satoshi Hub'),
+        backgroundColor: AppTheme.backgroundColor,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: _loadRecentTransactions,
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: AppTheme.surfaceColor,
-        selectedItemColor: AppTheme.primaryColor,
-        unselectedItemColor: AppTheme.textSecondary,
-        currentIndex: 0,
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              context.go('/');
-              break;
-            case 1:
-              context.go('/bridge');
-              break;
-            case 2:
-              context.go('/activity');
-              break;
-            case 3:
-              context.go('/settings');
-              break;
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.swap_horiz),
-            label: 'Bridge',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'Activity',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () => context.go('/settings'),
           ),
         ],
       ),
+      body: RefreshIndicator(
+        onRefresh: _loadRecentTransactions,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const WalletStatusCard(),
+                const SizedBox(height: 24),
+                const QuickActions(),
+                const SizedBox(height: 24),
+                RecentTransactionsSection(
+                  isLoading: _isLoading,
+                  error: _error,
+                  transactions: _recentTransactions,
+                  onViewAll: () => context.go('/activity'),
+                  onRefresh: _loadRecentTransactions,
+                  onTapTransaction: (txId) => context.go('/transaction/$txId'),
+                ),
+                const SizedBox(height: 32),
+              ],
+            ),
+          ),
+        ),
+      ),
+      floatingActionButton: walletState.isConnected
+          ? FloatingActionButton.extended(
+              onPressed: () => context.go('/bridge'),
+              backgroundColor: AppTheme.primaryColor,
+              label: const Text('Bridge Now'),
+              icon: const Icon(Icons.swap_horiz),
+            )
+          : FloatingActionButton.extended(
+              onPressed: () => context.go('/connect-wallet'),
+              backgroundColor: AppTheme.primaryColor,
+              label: const Text('Connect Wallet'),
+              icon: const Icon(Icons.account_balance_wallet),
+            ),
     );
   }
 }

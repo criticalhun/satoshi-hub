@@ -6,9 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "build": "pnpm prisma:generate && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "start": "node dist/main",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -18,9 +18,6 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "test:integration": "NODE_ENV=test jest src/test/integration --detectOpenHandles",
-    "test:db:setup": "docker-compose -f docker-compose.test.yml up -d && sleep 10 && DATABASE_URL=\"postgresql://test_user:test_password@localhost:5433/satoshi_hub_test?schema=public\" pnpm exec prisma migrate deploy",
-    "test:db:teardown": "docker-compose -f docker-compose.test.yml down -v",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "ts-node --project ../../prisma/tsconfig.json ../../prisma/seed.ts"
@@ -32,9 +29,10 @@
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
     "@prisma/client": "6.15.0",
+    "@satoshi-hub/sdk": "workspace:*",
     "bullmq": "^5.10.2",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.2",
+    "class-validator": "^0.14.1",
     "ethers": "^5.7.2",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
@@ -61,6 +59,7 @@
     "ts-loader": "^9.4.3",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
+    "tsconfig-paths-webpack-plugin": "^4.1.0",
     "typescript": "^5.1.3"
   }
 }

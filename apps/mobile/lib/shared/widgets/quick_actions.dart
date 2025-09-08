@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
 
 class QuickActions extends StatelessWidget {
@@ -12,86 +11,51 @@ class QuickActions extends StatelessWidget {
       children: [
         Text(
           'Quick Actions',
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: TextStyle(
+            color: AppTheme.textPrimary,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 16),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Expanded(
-              child: _QuickActionCard(
-                icon: Icons.swap_horiz,
-                title: 'Bridge',
-                subtitle: 'Cross-chain transfer',
-                onTap: () => context.go('/bridge'),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _QuickActionCard(
-                icon: Icons.history,
-                title: 'Activity',
-                subtitle: 'View transactions',
-                onTap: () => context.go('/activity'),
-              ),
-            ),
+            _buildActionItem(context, Icons.send, 'Send'),
+            _buildActionItem(context, Icons.call_received, 'Receive'),
+            _buildActionItem(context, Icons.swap_horiz, 'Bridge'),
+            _buildActionItem(context, Icons.history, 'History'),
           ],
         ),
       ],
     );
   }
-}
 
-class _QuickActionCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-
-  const _QuickActionCard({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppTheme.cardColor,
-          borderRadius: BorderRadius.circular(16),
+  Widget _buildActionItem(BuildContext context, IconData icon, String label) {
+    return Column(
+      children: [
+        Container(
+          width: 56,
+          height: 56,
+          decoration: BoxDecoration(
+            color: AppTheme.cardColor,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            icon,
+            color: AppTheme.primaryColor,
+            size: 24,
+          ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(
-              icon,
-              color: AppTheme.primaryColor,
-              size: 32,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              title,
-              style: const TextStyle(
-                color: AppTheme.textPrimary,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              subtitle,
-              style: const TextStyle(
-                color: AppTheme.textSecondary,
-                fontSize: 12,
-              ),
-            ),
-          ],
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+          ),
         ),
-      ),
+      ],
     );
   }
 }

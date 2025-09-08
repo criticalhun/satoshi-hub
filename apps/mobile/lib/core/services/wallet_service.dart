@@ -7,7 +7,10 @@ class WalletService {
 
   Future<void> init() async {
     _web3App = await Web3App.createInstance(
-      projectId: 'YOUR_WALLETCONNECT_PROJECT_ID', // TODO: Cseréld ki a saját Project ID-dre!
+      // --- JAVÍTÁS ITT ---
+      // Cseréld ki a placeholder-t a saját Project ID-dre!
+      projectId: '85c0e1b3900399bfdfee809b65f7f47a', 
+      // --------------------
       metadata: const PairingMetadata(
         name: 'Satoshi Hub',
         description: 'Cross-chain Testnet Hub',
@@ -30,7 +33,9 @@ class WalletService {
       },
     );
 
-    onDisplayUri(response?.uri.toString() ?? '');
+    if (response?.uri != null) {
+      onDisplayUri(response!.uri.toString());
+    }
 
     session = await response?.session.future;
   }

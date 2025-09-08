@@ -11,34 +11,12 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Settings'),
         backgroundColor: AppTheme.backgroundColor,
+        elevation: 0,
       ),
       body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.settings,
-              color: AppTheme.primaryColor,
-              size: 64,
-            ),
-            SizedBox(height: 16),
-            Text(
-              'App Settings',
-              style: TextStyle(
-                color: AppTheme.textPrimary,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Coming Soon',
-              style: TextStyle(
-                color: AppTheme.textSecondary,
-                fontSize: 16,
-              ),
-            ),
-          ],
+        child: Text(
+          'Settings Screen - Coming Soon',
+          style: TextStyle(color: Colors.white),
         ),
       ),
     );

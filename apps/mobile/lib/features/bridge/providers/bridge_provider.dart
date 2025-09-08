@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/services/api_service.dart';
 import '../../../shared/models/chain_info.dart';
 import '../../../core/constants/app_constants.dart';
 
@@ -9,7 +10,8 @@ class BridgeState {
   final String toAddress;
   final bool isLoading;
   final String? error;
-
+  final String? successMessage;
+  
   const BridgeState({
     this.fromChain,
     this.toChain,
@@ -17,8 +19,9 @@ class BridgeState {
     this.toAddress = '',
     this.isLoading = false,
     this.error,
+    this.successMessage,
   });
-
+  
   BridgeState copyWith({
     ChainInfo? fromChain,
     ChainInfo? toChain,
@@ -26,6 +29,8 @@ class BridgeState {
     String? toAddress,
     bool? isLoading,
     String? error,
+    String? successMessage,
+    bool clearSuccess = false,
   }) {
     return BridgeState(
       fromChain: fromChain ?? this.fromChain,
@@ -34,102 +39,103 @@ class BridgeState {
       toAddress: toAddress ?? this.toAddress,
       isLoading: isLoading ?? this.isLoading,
       error: error,
+      successMessage: clearSuccess ? null : successMessage ?? this.successMessage,
     );
   }
 }
 
 class BridgeNotifier extends StateNotifier<BridgeState> {
-  BridgeNotifier() : super(const BridgeState());
-
+  final ApiService _apiService;
+  
+  BridgeNotifier(this._apiService) : super(const BridgeState());
+  
   void setFromChain(ChainInfo chain) {
-    state = state.copyWith(fromChain: chain, error: null);
+    state = state.copyWith(fromChain: chain, error: null, clearSuccess: true);
   }
-
+  
   void setToChain(ChainInfo chain) {
-    state = state.copyWith(toChain: chain, error: null);
+    state = state.copyWith(toChain: chain, error: null, clearSuccess: true);
   }
-
+  
   void setAmount(String amount) {
-    state = state.copyWith(amount: amount, error: null);
+    state = state.copyWith(amount: amount, error: null, clearSuccess: true);
   }
-
+  
   void setToAddress(String address) {
-    state = state.copyWith(toAddress: address, error: null);
+    state = state.copyWith(toAddress: address, error: null, clearSuccess: true);
   }
-
+  
   void swapChains() {
     final fromChain = state.fromChain;
     final toChain = state.toChain;
-    
-    state = state.copyWith(
-      fromChain: toChain,
-      toChain: fromChain,
-      error: null,
-    );
+    state = state.copyWith(fromChain: toChain, toChain: fromChain, error: null, clearSuccess: true);
   }
-
+  
   Future<void> submitBridge() async {
     if (!_validateForm()) return;
-
-    state = state.copyWith(isLoading: true, error: null);
-
+    
+    state = state.copyWith(isLoading: true, error: null, clearSuccess: true);
+    
     try {
-      // TODO: Implement actual bridge API call
-      await Future.delayed(const Duration(seconds: 2));
+      final payload = {
+        "fromChainId": state.fromChain!.chainId,
+        "toChainId": state.toChain!.chainId,
+        "payload": {
+          "type": "NATIVE_TOKEN_TRANSFER",
+          "to": state.toAddress,
+          "amount": state.amount,
+        }
+      };
       
-      // Simulate success
+      final result = await _apiService.createTransactionJob(payload);
+      
       state = state.copyWith(
         isLoading: false,
+        successMessage: 'Bridge job successfully created with ID: ${result.id}',
         amount: '',
         toAddress: '',
       );
-      
-      // TODO: Show success message and navigate
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        error: 'Bridge failed: ${e.toString()}',
+        error: e.toString().replaceFirst('Exception: ', ''),
       );
     }
   }
-
+  
   bool _validateForm() {
     if (state.fromChain == null) {
       state = state.copyWith(error: 'Please select source chain');
       return false;
     }
-    
     if (state.toChain == null) {
       state = state.copyWith(error: 'Please select destination chain');
       return false;
     }
-    
     if (state.fromChain?.chainId == state.toChain?.chainId) {
       state = state.copyWith(error: 'Source and destination chains must be different');
       return false;
     }
-    
-    if (state.amount.isEmpty || double.tryParse(state.amount) == null) {
+    if (state.amount.isEmpty || (double.tryParse(state.amount) ?? 0) <= 0) {
       state = state.copyWith(error: 'Please enter a valid amount');
       return false;
     }
-    
     if (state.toAddress.isEmpty) {
       state = state.copyWith(error: 'Please enter destination address');
       return false;
     }
-    
     return true;
   }
 }
 
 final bridgeProvider = StateNotifierProvider<BridgeNotifier, BridgeState>((ref) {
-  return BridgeNotifier();
+  final apiService = ref.watch(apiServiceProvider);
+  return BridgeNotifier(apiService);
 });
 
 // Available chains provider
 final availableChainsProvider = Provider<List<ChainInfo>>((ref) {
   return AppConstants.supportedChains
-      .map((chainData) => ChainInfo.fromJson(chainData))
-      .toList();
+    .map((chainData) => ChainInfo.fromJson(chainData))
+    .toList();
 });

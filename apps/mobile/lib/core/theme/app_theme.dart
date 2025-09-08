@@ -1,81 +1,52 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static const Color primaryColor = Color(0xFF6C5CE7);
-  static const Color secondaryColor = Color(0xFF00D2D3);
-  static const Color backgroundColor = Color(0xFF0F0F23);
-  static const Color surfaceColor = Color(0xFF1A1A2E);
-  static const Color cardColor = Color(0xFF16213E);
-  static const Color textPrimary = Color(0xFFFFFFFF);
-  static const Color textSecondary = Color(0xFFB8BCC8);
-  static const Color success = Color(0xFF00BFA5);
-  static const Color warning = Color(0xFFFFAB00);
-  static const Color error = Color(0xFFFF5252);
-
-  static ThemeData get darkTheme {
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.dark,
-      primaryColor: primaryColor,
-      scaffoldBackgroundColor: backgroundColor,
-      colorScheme: const ColorScheme.dark(
-        primary: primaryColor,
-        secondary: secondaryColor,
-        surface: surfaceColor,
-        background: backgroundColor,
-        error: error,
-      ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: backgroundColor,
-        elevation: 0,
-        titleTextStyle: TextStyle(
-          color: textPrimary,
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      cardTheme: CardThemeData(
-        color: cardColor,
-        elevation: 4,
+  // Fő színek
+  static const primaryColor = Color(0xFF6200EE);
+  static const secondaryColor = Color(0xFF03DAC6);  // Hiányzó másodlagos szín
+  static const accentColor = Color(0xFF03DAC6);
+  
+  // Háttér és felület színek
+  static const backgroundColor = Color(0xFF121212);
+  static const surfaceColor = Color(0xFF1E1E1E);
+  static const cardColor = Color(0xFF242424);
+  
+  // Szöveg színek
+  static const textPrimary = Color(0xFFFFFFFF);
+  static const textSecondary = Color(0xFFB3B3B3);
+  
+  // Állapot színek
+  static const success = Color(0xFF4CAF50);
+  static const error = Color(0xFFE53935);
+  static const warning = Color(0xFFFFC107);
+  static const info = Color(0xFF2196F3);
+  
+  // Alap téma
+  static final ThemeData darkTheme = ThemeData(
+    primaryColor: primaryColor,
+    scaffoldBackgroundColor: backgroundColor,
+    cardColor: cardColor,
+    colorScheme: const ColorScheme.dark(
+      primary: primaryColor,
+      secondary: accentColor,
+      surface: surfaceColor,
+      background: backgroundColor,
+    ),
+    textTheme: const TextTheme(
+      headlineLarge: TextStyle(color: textPrimary, fontSize: 28, fontWeight: FontWeight.bold),
+      headlineMedium: TextStyle(color: textPrimary, fontSize: 24, fontWeight: FontWeight.bold),
+      titleLarge: TextStyle(color: textPrimary, fontSize: 20, fontWeight: FontWeight.w600),
+      bodyLarge: TextStyle(color: textPrimary, fontSize: 16),
+      bodyMedium: TextStyle(color: textSecondary, fontSize: 14),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: primaryColor,
+        foregroundColor: textPrimary,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(8),
         ),
       ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: primaryColor,
-          foregroundColor: textPrimary,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ),
-      textTheme: const TextTheme(
-        headlineLarge: TextStyle(
-          color: textPrimary,
-          fontSize: 32,
-          fontWeight: FontWeight.bold,
-        ),
-        headlineMedium: TextStyle(
-          color: textPrimary,
-          fontSize: 24,
-          fontWeight: FontWeight.w600,
-        ),
-        headlineSmall: TextStyle(
-          color: textPrimary,
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-        ),
-        bodyLarge: TextStyle(
-          color: textPrimary,
-          fontSize: 16,
-        ),
-        bodyMedium: TextStyle(
-          color: textSecondary,
-          fontSize: 14,
-        ),
-      ),
-    );
-  }
+    ),
+  );
 }
