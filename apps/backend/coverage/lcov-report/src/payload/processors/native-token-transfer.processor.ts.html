@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
@@ -90,18 +90,14 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -109,49 +105,68 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// apps/backend/src/payload/processors/native-token-transfer.processor.ts
-<span class="cstat-no" title="statement not covered" >import { Injectable, Logger } from '@nestjs/common';</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { Injectable, Logger } from '@nestjs/common';</span>
 import { IPayloadProcessor, ProcessedTxData } from '../payload.interface';
-<span class="cstat-no" title="statement not covered" >import { NativeTokenTransferPayload, PayloadType, TransactionPayload } from '@satoshi-hub/sdk';</span>
+import { NativeTokenTransferPayload, PayloadType, TransactionPayload } from '@satoshi-hub/sdk';
 <span class="cstat-no" title="statement not covered" >import { ethers } from 'ethers';</span>
 &nbsp;
 @Injectable()
 export <span class="fstat-no" title="function not covered" >class <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >N</span>ativeTokenTransferProcessor<span class="cstat-no" title="statement not covered" > </span>implements IPayloadProcessor {</span></span>
   private readonly <span class="cstat-no" title="statement not covered" >logger = new Logger(NativeTokenTransferProcessor.name);</span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >  async </span>process(payload: TransactionPayload): Promise&lt;ProcessedTxData&gt; {
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (payload.type !== PayloadType.NATIVE_TOKEN_TRANSFER) {</span>
-<span class="cstat-no" title="statement not covered" >      throw new Error(`Invalid payload type: ${payload.type}`);</span>
+<span class="fstat-no" title="function not covered" >  async </span>process(
+    payload: TransactionPayload,
+    fromChainId: number,
+    toChainId: number,
+  ): Promise&lt;ProcessedTxData&gt; {
+    // Egyszerűbb ellenőrzés, nem használunk enum összehasonlítást
+    const transferPayload = <span class="cstat-no" title="statement not covered" >payload as NativeTokenTransferPayload;</span>
+&nbsp;
+    // Ellenőrizzük a szükséges mezőket
+<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!transferPayload.to || !transferPayload.amount) {</span>
+<span class="cstat-no" title="statement not covered" >      throw new Error('Missing required fields in payload: to or amount');</span>
     }
 &nbsp;
-    const p = <span class="cstat-no" title="statement not covered" >payload as NativeTokenTransferPayload;</span>
-<span class="cstat-no" title="statement not covered" >    this.logger.log(`Processing native token transfer to ${p.to} amount ${p.amount}`);</span>
+<span class="cstat-no" title="statement not covered" >    this.logger.log(`Processing native token transfer: ${transferPayload.amount} to ${transferPayload.to}`);</span>
 &nbsp;
-    // JAVÍTÁS: ethers v5 szintaxis
-    const amountInWei = <span class="cstat-no" title="statement not covered" >ethers.utils.parseUnits(p.amount, 'ether');</span>
-&nbsp;
+    // Készítsük el a tranzakció adatait
 <span class="cstat-no" title="statement not covered" >    return {</span>
-      to: p.to,
-      value: amountInWei,
-      data: '0x',
+      to: transferPayload.to,
+      value: ethers.utils.parseEther(transferPayload.amount),
+      data: undefined,
     };
   }
-}</pre></td></tr></table></pre>
+}
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-07T10:53:33.424Z
+                at 2025-09-12T06:06:35.459Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

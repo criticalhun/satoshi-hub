@@ -1,4 +1,3 @@
-// apps/backend/src/payload/processors/native-token-transfer.processor.ts
 import { Injectable, Logger } from '@nestjs/common';
 import { IPayloadProcessor, ProcessedTxData } from '../payload.interface';
 import { NativeTokenTransferPayload, PayloadType, TransactionPayload } from '@satoshi-hub/sdk';
@@ -8,21 +7,26 @@ import { ethers } from 'ethers';
 export class NativeTokenTransferProcessor implements IPayloadProcessor {
   private readonly logger = new Logger(NativeTokenTransferProcessor.name);
 
-  async process(payload: TransactionPayload): Promise<ProcessedTxData> {
-    if (payload.type !== PayloadType.NATIVE_TOKEN_TRANSFER) {
-      throw new Error(`Invalid payload type: ${payload.type}`);
+  async process(
+    payload: TransactionPayload,
+    fromChainId: number,
+    toChainId: number,
+  ): Promise<ProcessedTxData> {
+    // Egyszerűbb ellenőrzés, nem használunk enum összehasonlítást
+    const transferPayload = payload as NativeTokenTransferPayload;
+
+    // Ellenőrizzük a szükséges mezőket
+    if (!transferPayload.to || !transferPayload.amount) {
+      throw new Error('Missing required fields in payload: to or amount');
     }
 
-    const p = payload as NativeTokenTransferPayload;
-    this.logger.log(`Processing native token transfer to ${p.to} amount ${p.amount}`);
+    this.logger.log(`Processing native token transfer: ${transferPayload.amount} to ${transferPayload.to}`);
 
-    // JAVÍTÁS: ethers v5 szintaxis
-    const amountInWei = ethers.utils.parseUnits(p.amount, 'ether');
-
+    // Készítsük el a tranzakció adatait
     return {
-      to: p.to,
-      value: amountInWei,
-      data: '0x',
+      to: transferPayload.to,
+      value: ethers.utils.parseEther(transferPayload.amount),
+      data: undefined,
     };
   }
 }

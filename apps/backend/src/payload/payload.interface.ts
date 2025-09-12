@@ -3,12 +3,19 @@ import { TransactionPayload } from '@satoshi-hub/sdk';
 
 // This is the data our processors will return
 export interface ProcessedTxData {
+  // A célcím
   to: string;
-  value: ethers.BigNumberish; // JAVÍTÁS: String-ről BigNumberish-re
-  data: string;
+  // Az érték (ETH/natív token)
+  value: ethers.BigNumber;
+  // Adat (ha van)
+  data?: string;
 }
 
-// All payload processors must implement this interface
+// Interface for payload processors
 export interface IPayloadProcessor {
-  process(payload: TransactionPayload): Promise<ProcessedTxData>;
+  process(
+    payload: TransactionPayload,
+    fromChainId: number,
+    toChainId: number
+  ): Promise<ProcessedTxData>;
 }

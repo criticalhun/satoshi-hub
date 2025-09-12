@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <base href="$FLUTTER_BASE_HREF">
+
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A cross-chain testnet hub application.">
+  <meta name="description" content="Satoshi Hub - Cross-chain bridge application">
+  <meta name="mobile-web-app-capable" content="yes">
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,18 +19,99 @@
 
   <title>Satoshi Hub</title>
   <link rel="manifest" href="manifest.json">
+
+  <script>
+    // The value below is injected by flutter build, do not touch.
+    var serviceWorkerVersion = null;
+  </script>
+  <!-- This script adds the flutter initialization JS code -->
+  <script src="flutter.js" defer></script>
+  <style>
+    body {
+      background-color: #121212;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: white;
+      font-family: 'Roboto', sans-serif;
+    }
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #6E45E2;
+      animation: spin 1s ease-in-out infinite;
+      margin-bottom: 20px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
-  <!-- This script installs service_worker.js to provide PWA functionality to
-       application. For more information, see:
-       https://developers.google.com/web/fundamentals/primers/service-workers -->
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p>Loading Satoshi Hub...</p>
+  </div>
+
   <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('flutter_service_worker.js');
+    window.addEventListener('load', function(ev) {
+      // Initialize the Flutter configuration
+      _flutter = {
+        loader: {
+          loadEntrypoint: function(options) {
+            var entrypointUrl = "main.dart.js";
+            if (options.serviceWorker) {
+              serviceLoader = options.serviceWorker;
+            }
+            Promise.resolve().then(function() {
+              let script = document.createElement("script");
+              script.src = entrypointUrl;
+              document.body.append(script);
+              return new Promise(function(resolve, reject) {
+                script.onload = resolve;
+                script.onerror = reject;
+              });
+            }).then(function() {
+              if (typeof options.onEntrypointLoaded === "function") {
+                return options.onEntrypointLoaded({
+                  initializeEngine: function() {
+                    return Promise.resolve({
+                      runApp: function() {
+                        return Promise.resolve();
+                      }
+                    });
+                  }
+                });
+              }
+            }).finally(function() {
+              // Hide loading indicator when app is loaded
+              document.getElementById('loading').style.display = 'none';
+            });
+          }
+        }
+      };
+
+      // Download main.dart.js
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: serviceWorkerVersion,
+        },
+        onEntrypointLoaded: function(engineInitializer) {
+          engineInitializer.initializeEngine().then(function(appRunner) {
+            appRunner.runApp();
+          });
+        }
       });
-    }
+    });
   </script>
-  <script src="main.dart.js" type="application/javascript"></script>
 </body>
 </html>

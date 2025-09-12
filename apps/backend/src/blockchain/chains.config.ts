@@ -1,45 +1,74 @@
-export interface ChainConfig {
+export interface Chain {
   chainId: number;
   name: string;
   rpcUrl: string;
-  nativeCurrency: string;
+  type: 'evm' | 'solana' | 'other'; // Láncok típusa
+  symbol: string;
+  blockExplorer?: string;
+  contracts?: {
+    vrfCoordinator?: string;
+    // Egyéb szerződéscímek
+  };
 }
 
-export const SUPPORTED_CHAINS: ChainConfig[] = [
+export const CHAINS: Chain[] = [
   {
     chainId: 11155111,
-    name: "Sepolia Testnet",
-    rpcUrl: "https://rpc.sepolia.org",
-    nativeCurrency: "ETH",
+    name: 'Sepolia',
+    rpcUrl: 'https://rpc.sepolia.org',
+    type: 'evm', // Ethereum Virtual Machine kompatibilis
+    symbol: 'ETH',
+    blockExplorer: 'https://sepolia.etherscan.io',
+    contracts: {
+      vrfCoordinator: '0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625'
+    }
   },
   {
-    chainId: 80002,
-    name: "Polygon Amoy",
-    rpcUrl: "https://rpc-amoy.polygon.technology/",
-    nativeCurrency: "MATIC",
+    chainId: 421613,
+    name: 'Arbitrum Goerli',
+    rpcUrl: 'https://goerli-rollup.arbitrum.io/rpc',
+    type: 'evm',
+    symbol: 'ETH',
+    blockExplorer: 'https://goerli.arbiscan.io'
   },
   {
-    chainId: 421614,
-    name: "Arbitrum Sepolia",
-    rpcUrl: "https://arb-sepolia.g.alchemy.com/v2/demo",
-    nativeCurrency: "ETH",
+    chainId: 420,
+    name: 'Optimism Goerli',
+    rpcUrl: 'https://goerli.optimism.io',
+    type: 'evm',
+    symbol: 'ETH',
+    blockExplorer: 'https://goerli-optimism.etherscan.io'
+  },
+  {
+    chainId: 80001,
+    name: 'Polygon Mumbai',
+    rpcUrl: 'https://rpc-mumbai.maticvigil.com',
+    type: 'evm',
+    symbol: 'MATIC',
+    blockExplorer: 'https://mumbai.polygonscan.com'
   },
   {
     chainId: 43113,
-    name: "Avalanche Fuji",
-    rpcUrl: "https://api.avax-test.network/ext/bc/C/rpc",
-    nativeCurrency: "AVAX",
+    name: 'Avalanche Fuji',
+    rpcUrl: 'https://api.avax-test.network/ext/bc/C/rpc',
+    type: 'evm',
+    symbol: 'AVAX',
+    blockExplorer: 'https://testnet.snowtrace.io'
   },
   {
     chainId: 97,
-    name: "BNB Chain Testnet",
-    rpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545",
-    nativeCurrency: "BNB",
+    name: 'BNB Chain Testnet',
+    rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545',
+    type: 'evm',
+    symbol: 'BNB',
+    blockExplorer: 'https://testnet.bscscan.com'
   },
   {
-    chainId: -1, // Speciális: nem EVM kompatibilis
-    name: "Solana Devnet",
-    rpcUrl: "https://api.devnet.solana.com",
-    nativeCurrency: "SOL",
-  },
+    chainId: -1, // Példa nem-EVM láncra (Solana)
+    name: 'Solana Devnet',
+    rpcUrl: 'https://api.devnet.solana.com',
+    type: 'solana',
+    symbol: 'SOL',
+    blockExplorer: 'https://explorer.solana.com/?cluster=devnet'
+  }
 ];

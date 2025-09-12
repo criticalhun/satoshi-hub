@@ -18,15 +18,15 @@ export class TxController {
 
   @Get()
   async findAll(
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '10',
     @Query('fromChainId') fromChainId?: string,
     @Query('toChainId') toChainId?: string,
     @Query('status') status?: string,
   ) {
     return this.txService.findAll({
-      page,
-      limit,
+      page: Number(page),
+      limit: Number(limit),
       fromChainId: fromChainId ? parseInt(fromChainId) : undefined,
       toChainId: toChainId ? parseInt(toChainId) : undefined,
       status,

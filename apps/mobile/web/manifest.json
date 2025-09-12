@@ -4,8 +4,8 @@
     "start_url": ".",
     "display": "standalone",
     "background_color": "#121212",
-    "theme_color": "#6200EE",
-    "description": "A cross-chain testnet hub application.",
+    "theme_color": "#6E45E2",
+    "description": "Cross-chain bridge application",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

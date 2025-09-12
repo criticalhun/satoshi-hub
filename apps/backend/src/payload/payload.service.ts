@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PayloadType, TransactionPayload } from '@satoshi-hub/sdk';
+import { TransactionPayload } from '@satoshi-hub/sdk';
 import { NativeTokenTransferProcessor } from './processors/native-token-transfer.processor';
 import {
   IPayloadProcessor,
@@ -9,26 +9,31 @@ import {
 @Injectable()
 export class PayloadService {
   private readonly logger = new Logger(PayloadService.name);
-  private processors: Map<PayloadType, IPayloadProcessor> = new Map();
+  private processors: Map<string, IPayloadProcessor> = new Map();
 
   constructor(
     private readonly nativeTokenTransferProcessor: NativeTokenTransferProcessor,
   ) {
-    this.processors.set(
-      PayloadType.NATIVE_TOKEN_TRANSFER,
-      this.nativeTokenTransferProcessor,
-    );
+    // Csak a string literál használata a regisztrációhoz
+    this.registerProcessor('transfer', this.nativeTokenTransferProcessor);
   }
 
-  process(payload: TransactionPayload): Promise<ProcessedTxData> {
-    const processor = this.processors.get(payload.type);
+  private registerProcessor(type: string, processor: IPayloadProcessor) {
+    this.processors.set(type, processor);
+    this.logger.log(`Registered processor for payload type: ${type}`);
+  }
 
+  async processPayload(
+    payload: TransactionPayload,
+    fromChainId: number,
+    toChainId: number,
+  ): Promise<ProcessedTxData> {
+    const processor = this.processors.get(payload.type);
     if (!processor) {
       this.logger.error(`No processor found for payload type: ${payload.type}`);
       throw new Error(`Unsupported payload type: ${payload.type}`);
     }
 
-    this.logger.log(`Delegating to processor for type: ${payload.type}`);
-    return processor.process(payload);
+    return processor.process(payload, fromChainId, toChainId);
   }
 }

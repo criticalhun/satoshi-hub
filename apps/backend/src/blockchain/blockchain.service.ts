@@ -1,43 +1,78 @@
-// apps/backend/src/blockchain/blockchain.service.ts
-import { Injectable, Logger } from '@nestjs/common';
-import { ethers } from 'ethers';
-import { ConfigService } from '@nestjs/config';
-import { SUPPORTED_CHAINS, ChainConfig } from './chains.config';
+import { Injectable } from '@nestjs/common';
+import { Wallet } from 'ethers';
+import { providers } from 'ethers';
+import { CHAINS, Chain } from './chains.config';
 
 @Injectable()
 export class BlockchainService {
-  private readonly logger = new Logger(BlockchainService.name);
-
-  constructor(private readonly configService: ConfigService) {}
-
-  private getChainConfig(chainId: number): ChainConfig {
-    const chain = SUPPORTED_CHAINS.find((chain) => chain.chainId === chainId);
-    if (!chain) {
-      throw new Error(`Unsupported chainId: ${chainId}`);
-    }
-    return chain;
+  // Új metódus: támogatott láncok ellenőrzése
+  private isSupportedChain(chainId: number): boolean {
+    return CHAINS.some((chain) => chain.chainId === chainId);
   }
 
-  getSigner(chainId: number): ethers.Wallet | null {
-    const chainConfig = this.getChainConfig(chainId);
-    if (chainConfig.chainId === -1) {
-      this.logger.error(`Non-EVM chain detected: ${chainConfig.name}. Signer not applicable.`);
+  // Új metódus: EVM-kompatibilis láncok ellenőrzése
+  private isEvmChain(chainId: number): boolean {
+    const chain = CHAINS.find((c) => c.chainId === chainId);
+    return chain?.type === 'evm';
+  }
+
+  // Provider lekérése egy adott lánchoz
+  getProvider(chainId: number): providers.JsonRpcProvider | null {
+    if (!this.isSupportedChain(chainId)) {
+      throw new Error(`Unsupported chainId: ${chainId}`);
+    }
+
+    const chain = CHAINS.find((c) => c.chainId === chainId);
+    
+    if (!chain || chain.type !== 'evm') {
       return null;
     }
 
-    const rpcUrl = chainConfig.rpcUrl;
-    this.logger.log(`Connecting to RPC URL: ${rpcUrl} for chainId: ${chainId}`);
+    return new providers.JsonRpcProvider(chain.rpcUrl);
+  }
+
+  // Signer lekérése egy adott lánchoz
+  getSigner(chainId: number): Wallet | null {
+    // 1. Ellenőrizzük, hogy a lánc támogatott-e
+    if (!this.isSupportedChain(chainId)) {
+      throw new Error(`Unsupported chainId: ${chainId}`);
+    }
     
-    // JAVÍTÁS: ethers v5 szintaxis
-    const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
+    // 2. Ellenőrizzük, hogy EVM lánc-e
+    if (!this.isEvmChain(chainId)) {
+      return null;
+    }
     
-    const privateKey = this.configService.get<string>('SIGNER_PRIVATE_KEY');
+    // 3. Ellenőrizzük, hogy a private key be van-e állítva
+    const privateKey = process.env.SIGNER_PRIVATE_KEY;
     if (!privateKey) {
       throw new Error('SIGNER_PRIVATE_KEY is not set in the environment variables');
     }
-    const signer = new ethers.Wallet(privateKey, provider);
+    
+    // 4. Provider létrehozása
+    const provider = this.getProvider(chainId);
+    if (!provider) {
+      return null;
+    }
+    
+    // 5. Wallet létrehozása a private key és provider segítségével
+    return new Wallet(privateKey, provider);
+  }
 
-    this.logger.log(`Created signer for address ${signer.address} on chainId ${chainId}`);
-    return signer;
+  // Provider és Signer együttes lekérése
+  async getProviderAndSigner(chainId: number): Promise<{provider: providers.JsonRpcProvider | null, signer: Wallet | null}> {
+    const provider = this.getProvider(chainId);
+    const signer = this.getSigner(chainId);
+    
+    return { provider, signer };
+  }
+
+  // Chainlink VRF koordinátor címének lekérése
+  getVrfCoordinatorAddress(chainId: number): string {
+    const chain = CHAINS.find((c) => c.chainId === chainId);
+    if (!chain) {
+      throw new Error(`Unsupported chainId: ${chainId}`);
+    }
+    return chain.contracts?.vrfCoordinator || '';
   }
 }

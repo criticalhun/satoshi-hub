@@ -1,28 +1,26 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConfigService } from '@nestjs/config';
 import { BlockchainService } from './blockchain.service';
 
 describe('BlockchainService', () => {
   let service: BlockchainService;
-  let configService: ConfigService;
-
-  const mockConfigService = {
-    get: jest.fn(),
-  };
+  
+  // A teszt előtt állítsuk be a környezeti változót
+  const originalEnv = process.env;
 
   beforeEach(async () => {
+    // Mockoljuk a környezeti változókat
+    process.env = { ...originalEnv, SIGNER_PRIVATE_KEY: '0x1234567890123456789012345678901234567890123456789012345678901234' };
+
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        BlockchainService,
-        {
-          provide: ConfigService,
-          useValue: mockConfigService,
-        },
-      ],
+      providers: [BlockchainService],
     }).compile();
 
     service = module.get<BlockchainService>(BlockchainService);
-    configService = module.get<ConfigService>(ConfigService);
+  });
+
+  afterEach(() => {
+    // Állítsuk vissza az eredeti környezeti változókat
+    process.env = originalEnv;
   });
 
   it('should be defined', () => {
@@ -40,14 +38,16 @@ describe('BlockchainService', () => {
   });
 
   it('should throw error when SIGNER_PRIVATE_KEY is not set', () => {
-    mockConfigService.get.mockReturnValue(undefined);
+    // Állítsuk be null-ra a SIGNER_PRIVATE_KEY-t
+    process.env.SIGNER_PRIVATE_KEY = '';
     
     // Use a supported EVM chainId - Sepolia Testnet
     expect(() => service.getSigner(11155111)).toThrow('SIGNER_PRIVATE_KEY is not set in the environment variables');
   });
 
   it('should create signer for valid EVM chain with private key', () => {
-    mockConfigService.get.mockReturnValue('0x0000000000000000000000000000000000000000000000000000000000000001');
+    // Állítsuk vissza a SIGNER_PRIVATE_KEY-t
+    process.env.SIGNER_PRIVATE_KEY = '0x1234567890123456789012345678901234567890123456789012345678901234';
     
     const result = service.getSigner(11155111);
     expect(result).toBeTruthy();
